@@ -3,28 +3,31 @@
 #include <time.h>
 #include <conio.h>
 #include <windows.h>
+#include <mmsystem.h> 
 
-#define MAX_WIDTH 40
-#define MAX_HEIGHT 20
-#define MIN_WIDTH 10
-#define MIN_HEIGHT 5
+#pragma comment(lib, "winmm.lib")
 
-int WIDTH, HEIGHT;
+#define LARGURA_MAX 40
+#define ALTURA_MAX 20
+#define LARGURA_MIN 10
+#define ALTURA_MIN 5
 
-int gameOver;
-int score;
-int snakeLength;
-int snakePosX, snakePosY;
-int fruitPosX, fruitPosY;
-int tailX[MAX_WIDTH * MAX_HEIGHT];
-int tailY[MAX_WIDTH * MAX_HEIGHT];
-char field[MAX_HEIGHT][MAX_WIDTH];
+int LARGURA, ALTURA;
 
-enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
-enum Direction dir;
+int fimDeJogo;
+int pontuacao;
+int comprimentoCobra;
+int posicaoXCobra, posicaoYCobra;
+int posicaoXFruta, posicaoYFruta;
+int caudaX[LARGURA_MAX * ALTURA_MAX];
+int caudaY[LARGURA_MAX * ALTURA_MAX];
+char campo[ALTURA_MAX][LARGURA_MAX];
 
-char ufpi_sequence[] = {'u', 'f', 'p', 'i'};
-int ufpi_index = 0;
+enum Direcao { PARAR = 0, ESQUERDA, DIREITA, CIMA, BAIXO };
+enum Direcao dir;
+
+char sequenciaUFPI[] = {'u', 'f', 'p', 'i'};
+int indiceUFPI = 0;
 
 void gotoxy(int x, int y) {
     COORD coord;
@@ -33,190 +36,196 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void SetColor(int color) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+void setColor(int cor) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), cor);
 }
 
-void Setup() {
-    gameOver = 0;
-    dir = STOP;
-    snakePosX = WIDTH / 2;
-    snakePosY = HEIGHT / 2;
-    fruitPosX = rand() % WIDTH;
-    fruitPosY = rand() % HEIGHT;
-    score = 0;
-    snakeLength = 0;
+void tocarEfeitoSonoro(const char* arquivoSom) {
+    PlaySound(arquivoSom, NULL, SND_FILENAME | SND_ASYNC);
 }
 
-void Draw() {
+void configuracao() {
+    fimDeJogo = 0;
+    dir = PARAR;
+    posicaoXCobra = LARGURA / 2;
+    posicaoYCobra = ALTURA / 2;
+    posicaoXFruta = rand() % LARGURA;
+    posicaoYFruta = rand() % ALTURA;
+    pontuacao = 0;
+    comprimentoCobra = 0;
+    tocarEfeitoSonoro("musicafundo.wav");
+}
+
+void desenhar() {
     system("cls");
 
     gotoxy(0, 0);
-    for (int i = 0; i < WIDTH + 2; i++) {
-        SetColor(3); 
+    for (int i = 0; i < LARGURA + 2; i++) {
+        setColor(3); 
         printf("*");
     }
 
-    for (int i = 0; i < HEIGHT; i++) {
+    for (int i = 0; i < ALTURA; i++) {
         gotoxy(0, i + 1);
-        SetColor(3); 
+        setColor(3); 
         printf("*");
-        for (int j = 0; j < WIDTH; j++) {
-            if (i == snakePosY && j == snakePosX) {
-                SetColor(10); 
+        for (int j = 0; j < LARGURA; j++) {
+            if (i == posicaoYCobra && j == posicaoXCobra) {
+                setColor(10); 
                 printf("O");
-            } else if (i == fruitPosY && j == fruitPosX) {
-                SetColor(12); 
+            } else if (i == posicaoYFruta && j == posicaoXFruta) {
+                setColor(12); 
                 printf("o");
             } else {
-                int isTail = 0;
-                for (int k = 0; k < snakeLength; k++) {
-                    if (tailX[k] == j && tailY[k] == i) {
-                        SetColor(14); 
-                        printf("%c", ufpi_sequence[(k + ufpi_index) % 4]);
-                        isTail = 1;
+                int ehCauda = 0;
+                for (int k = 0; k < comprimentoCobra; k++) {
+                    if (caudaX[k] == j && caudaY[k] == i) {
+                        setColor(14); 
+                        printf("%c", sequenciaUFPI[(k + indiceUFPI) % 4]);
+                        ehCauda = 1;
                         break;
                     }
                 }
-                if (!isTail) {
-                    SetColor(15); 
+                if (!ehCauda) {
+                    setColor(15); 
                     printf(" ");
                 }
             }
         }
-        SetColor(3); 
+        setColor(3); 
         printf("*\n");
     }
 
-    for (int i = 0; i < WIDTH + 2; i++) {
-        SetColor(3); 
+    for (int i = 0; i < LARGURA + 2; i++) {
+        setColor(3); 
         printf("*");
     }
     printf("\n");
 
-    SetColor(7);
-    printf("Score: %d\n", score);
+    setColor(7);
+    printf("Pontuacao: %d\n", pontuacao);
 }
 
-void Input() {
+void entrada() {
     if (_kbhit()) {
         switch (_getch()) {
             case 'a':
-                dir = LEFT;
+                dir = ESQUERDA;
                 break;
             case 'd':
-                dir = RIGHT;
+                dir = DIREITA;
                 break;
             case 'w':
-                dir = UP;
+                dir = CIMA;
                 break;
             case 's':
-                dir = DOWN;
+                dir = BAIXO;
                 break;
             case 'x':
-                gameOver = 1;
+                fimDeJogo = 1;
                 break;
         }
     }
 }
 
-void Algorithm() {
-    int prevX = tailX[0];
-    int prevY = tailY[0];
+void algoritmo() {
+    int prevX = caudaX[0];
+    int prevY = caudaY[0];
     int prev2X, prev2Y;
-    tailX[0] = snakePosX;
-    tailY[0] = snakePosY;
+    caudaX[0] = posicaoXCobra;
+    caudaY[0] = posicaoYCobra;
 
-    for (int i = 1; i < snakeLength; i++) {
-        prev2X = tailX[i];
-        prev2Y = tailY[i];
-        tailX[i] = prevX;
-        tailY[i] = prevY;
+    for (int i = 1; i < comprimentoCobra; i++) {
+        prev2X = caudaX[i];
+        prev2Y = caudaY[i];
+        caudaX[i] = prevX;
+        caudaY[i] = prevY;
         prevX = prev2X;
         prevY = prev2Y;
     }
 
     switch (dir) {
-        case LEFT:
-            snakePosX--;
+        case ESQUERDA:
+            posicaoXCobra--;
             break;
-        case RIGHT:
-            snakePosX++;
+        case DIREITA:
+            posicaoXCobra++;
             break;
-        case UP:
-            snakePosY--;
+        case CIMA:
+            posicaoYCobra--;
             break;
-        case DOWN:
-            snakePosY++;
+        case BAIXO:
+            posicaoYCobra++;
             break;
         default:
             break;
     }
 
-    if (snakePosX < 0 || snakePosX >= WIDTH || snakePosY < 0 || snakePosY >= HEIGHT)
-        gameOver = 1;
+    if (posicaoXCobra < 0 || posicaoXCobra >= LARGURA || posicaoYCobra < 0 || posicaoYCobra >= ALTURA)
+        fimDeJogo = 1;
 
-    for (int i = 0; i < snakeLength; i++) {
-        if (tailX[i] == snakePosX && tailY[i] == snakePosY)
-            gameOver = 1;
+    for (int i = 0; i < comprimentoCobra; i++) {
+        if (caudaX[i] == posicaoXCobra && caudaY[i] == posicaoYCobra)
+            fimDeJogo = 1;
     }
 
-    if (snakePosX == fruitPosX && snakePosY == fruitPosY) {
-        score += 10;
-        fruitPosX = rand() % WIDTH;
-        fruitPosY = rand() % HEIGHT;
-        snakeLength++;
+    if (posicaoXCobra == posicaoXFruta && posicaoYCobra == posicaoYFruta) {
+        pontuacao += 10;
+        tocarEfeitoSonoro("comida.wav");
+        posicaoXFruta = rand() % LARGURA;
+        posicaoYFruta = rand() % ALTURA;
+        comprimentoCobra++;
     }
 }
 
-void ChooseFieldSize() {
-    int choice;
-    printf("Choose the field size:\n");
+void escolherTamanhoCampo() {
+    int escolha;
+    printf("Escolha o tamanho do campo:\n");
     printf("1 - Facil\n");
     printf("2 - Medio\n");
     printf("3 - Dificil\n");
-    scanf("%d", &choice);
+    scanf("%d", &escolha);
 
-    switch (choice) {
+    switch (escolha) {
         case 1:
-            WIDTH = MAX_WIDTH;
-            HEIGHT = MAX_HEIGHT;
+            LARGURA = LARGURA_MAX;
+            ALTURA = ALTURA_MAX;
             break;
         case 2:
-            WIDTH = (MAX_WIDTH + MIN_WIDTH) / 2;
-            HEIGHT = (MAX_HEIGHT + MIN_HEIGHT) / 2;
+            LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
+            ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
             break;
         case 3:
-            WIDTH = MIN_WIDTH;
-            HEIGHT = MIN_HEIGHT;
+            LARGURA = LARGURA_MIN;
+            ALTURA = ALTURA_MIN;
             break;
         default:
-            printf("Invalid choice. Setting to medium size.\n");
-            WIDTH = (MAX_WIDTH + MIN_WIDTH) / 2;
-            HEIGHT = (MAX_HEIGHT + MIN_HEIGHT) / 2;
+            printf("Escolha invalida. Configurando para tamanho medio.\n");
+            LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
+            ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
             break;
     }
 }
 
 int main() {
     srand(time(NULL)); 
-    ChooseFieldSize();
-    Setup();
+    escolherTamanhoCampo();
+    configuracao();
 
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) {
-            field[i][j] = ' ';
+    for (int i = 0; i < ALTURA; i++) {
+        for (int j = 0; j < LARGURA; j++) {
+            campo[i][j] = ' ';
         }
     }
 
-    while (!gameOver) {
-        Draw();
-        Input();
-        Algorithm();
+    while (!fimDeJogo) {
+        desenhar();
+        entrada();
+        algoritmo();
         Sleep(100); 
     }
 
-    printf("Game Over! Your score: %d\n", score);
+    printf("Fim de Jogo! Sua pontuacao: %d\n", pontuacao);
 
     return 0;
 }
