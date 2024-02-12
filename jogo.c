@@ -53,7 +53,6 @@ void configuracao() {
     posicaoYFruta = rand() % ALTURA;
     pontuacao = 0;
     comprimentoCobra = 0;
-    tocarEfeitoSonoro("musicafundo.wav");
 }
 
 void desenhar() {
@@ -207,8 +206,32 @@ void escolherTamanhoCampo() {
     }
 }
 
+void telaInicial() {
+    tocarEfeitoSonoro("musicafundo.wav"); // Toca a música de fundo
+    printf("**************************************************\n");
+    printf("*                                                *\n");
+    printf("*          Oufpi                                 *\n");
+    printf("*              u                                 *\n");
+    printf("*              f       SNAKE                     *\n");
+    printf("*              p                                 *\n");
+    printf("*              iufpiufpiufpiufpiufpiufpiufpi     *\n");
+    printf("*                                          u     *\n");
+    printf("            Por favor, digite seu nome:    f     *\n");
+    printf("*                                          p     *\n");
+    printf("*                                          iufpi *\n");
+    printf("*                                                *\n");
+    printf("*                                                *\n");
+    printf("**************************************************\n");
+    char nome[21];
+    scanf("%20s", nome);
+    printf("Ola, %s! Pressione qualquer tecla para iniciar...\n", nome);
+    _getch(); 
+    PlaySound(NULL, NULL, 0); // Encerra a música de fundo
+}
+
 int main() {
     srand(time(NULL)); 
+    telaInicial();
     escolherTamanhoCampo();
     configuracao();
 
