@@ -5,8 +5,6 @@
 #include <windows.h>
 #include <mmsystem.h> 
 
-#pragma comment(lib, "winmm.lib")
-
 #define LARGURA_MAX 40
 #define ALTURA_MAX 20
 #define LARGURA_MIN 10
@@ -22,6 +20,8 @@ int posicaoXFruta, posicaoYFruta;
 int caudaX[LARGURA_MAX * ALTURA_MAX];
 int caudaY[LARGURA_MAX * ALTURA_MAX];
 char campo[ALTURA_MAX][LARGURA_MAX];
+char nome[21];
+
 
 enum Direcao { PARAR = 0, ESQUERDA, DIREITA, CIMA, BAIXO };
 enum Direcao dir;
@@ -102,7 +102,6 @@ void desenhar() {
     printf("\n");
 
     setColor(7);
-    printf("Pontuacao: %d\n", pontuacao);
 }
 
 void entrada() {
@@ -127,7 +126,7 @@ void entrada() {
     }
 }
 
-void algoritmo() {
+void algoritmo(FILE *arquivoPartidas) {
     int prevX = caudaX[0];
     int prevY = caudaY[0];
     int prev2X, prev2Y;
@@ -175,15 +174,26 @@ void algoritmo() {
         posicaoYFruta = rand() % ALTURA;
         comprimentoCobra++;
     }
+
+    if (fimDeJogo) {
+        // Salvar a partida no arquivo
+        fprintf(arquivoPartidas, "Nome: %s\n", nome);
+        fprintf(arquivoPartidas, "Pontuação: %d\n", pontuacao);
+        fprintf(arquivoPartidas, "Tamanho do Campo: %dx%d\n", LARGURA, ALTURA);
+        fprintf(arquivoPartidas, "---------------------------\n");
+    }
 }
+
+void exibirHistorico(); // Protótipo da função
 
 void escolherTamanhoCampo() {
     int escolha;
     printf("Escolha o tamanho do campo:\n");
     printf("1 - Facil\n");
     printf("2 - Medio\n");
-    printf("3 - Dificil\n");
+    printf("3 - Difícil\n");
     scanf("%d", &escolha);
+    PlaySound(NULL, NULL, 0); 
 
     switch (escolha) {
         case 1:
@@ -199,7 +209,7 @@ void escolherTamanhoCampo() {
             ALTURA = ALTURA_MIN;
             break;
         default:
-            printf("Escolha invalida. Configurando para tamanho medio.\n");
+            printf("Escolha inválida. Configurando para tamanho médio.\n");
             LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
             ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
             break;
@@ -207,33 +217,75 @@ void escolherTamanhoCampo() {
 }
 
 void telaInicial() {
-    tocarEfeitoSonoro("musicafundo.wav"); // Toca a música de fundo
-    printf("**************************************************\n");
-    printf("*                                                *\n");
-    printf("*          Oufpi                                 *\n");
-    printf("*              u                                 *\n");
-    printf("*              f       SNAKE                     *\n");
-    printf("*              p                                 *\n");
-    printf("*              iufpiufpiufpiufpiufpiufpiufpi     *\n");
-    printf("*                                          u     *\n");
-    printf("            Por favor, digite seu nome:    f     *\n");
-    printf("*                                          p     *\n");
-    printf("*                                          iufpi *\n");
-    printf("*                                                *\n");
-    printf("*                                                *\n");
-    printf("**************************************************\n");
-    char nome[21];
+    tocarEfeitoSonoro("musicafundo.wav"); 
+    printf("fuO----------------------SNAKE----------------------Ofu\n");
+    printf("p                                                     p\n");
+    printf("i                                                     i\n");
+    printf("|                      By:                            |\n");
+    printf("|                         Rodrigames                  |\n");
+    printf("|                                                     |\n");
+    printf("i                                                     i\n");
+    printf("p                                                     p\n");
+    printf("ufO----------------------SNAKE----------------------Ouf\n");
+    printf("Digite seu nome: ");
     scanf("%20s", nome);
-    printf("Ola, %s! Pressione qualquer tecla para iniciar...\n", nome);
+    
+    printf("------------------------- MENU -------------------------\n");
+    printf("1 - Jogar\n");
+    printf("2 - Ver Partidas\n");
+    printf("3 - Fechar\n");
+
+    int escolha;
+    scanf("%d", &escolha);
+    switch (escolha) {
+        case 1:
+            escolherTamanhoCampo();
+            configuracao();
+            break;
+        case 2:
+            exibirHistorico();
+            break;
+        case 3:
+            exit(0);
+            break;
+        default:
+            printf("Escolha invalida. Tente novamente.\n");
+            break;
+    }
+}
+
+void exibirHistorico() {
+    FILE *arquivoPartidas;
+    char linha[100];
+
+    arquivoPartidas = fopen("partidas.txt", "r");
+    if (arquivoPartidas == NULL) {
+        printf("Nenhuma partida registrada.\n");
+        return;
+    }
+
+    printf("Histórico de Partidas:\n");
+    while (fgets(linha, sizeof(linha), arquivoPartidas) != NULL) {
+        printf("%s", linha);
+    }
+
+    fclose(arquivoPartidas);
+
+    printf("\nPressione qualquer tecla para voltar ao menu inicial...");
     _getch(); 
-    PlaySound(NULL, NULL, 0); // Encerra a música de fundo
+    telaInicial();
 }
 
 int main() {
     srand(time(NULL)); 
     telaInicial();
-    escolherTamanhoCampo();
-    configuracao();
+
+    FILE *arquivoPartidas;
+    arquivoPartidas = fopen("partidas.txt", "a");
+    if (arquivoPartidas == NULL) {
+        printf("Erro ao abrir o arquivo de partidas.\n");
+        return 1;
+    }
 
     for (int i = 0; i < ALTURA; i++) {
         for (int j = 0; j < LARGURA; j++) {
@@ -244,11 +296,16 @@ int main() {
     while (!fimDeJogo) {
         desenhar();
         entrada();
-        algoritmo();
+        algoritmo(arquivoPartidas);
         Sleep(100); 
     }
 
-    printf("Fim de Jogo! Sua pontuacao: %d\n", pontuacao);
+    fclose(arquivoPartidas);
+
+    printf("Fim de Jogo! Sua pontuação: %d\n", pontuacao);
+    printf("Pressione qualquer tecla para voltar ao menu principal...\n\n");
+    _getch();
+    telaInicial();
 
     return 0;
 }

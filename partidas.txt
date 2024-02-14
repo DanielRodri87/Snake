@@ -1,0 +1,12 @@
+Nome: daniel
+Pontuação: 60
+Tamanho do Campo: 40x20
+---------------------------
+Nome: rita
+Pontuação: 50
+Tamanho do Campo: 25x12
+---------------------------
+Nome: doni
+Pontuação: 10
+Tamanho do Campo: 40x20
+---------------------------
