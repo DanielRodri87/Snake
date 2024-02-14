@@ -34,7 +34,7 @@ gcc jogo.c -o jogo.exe -lwinmm
 
 Clique no botão abaixo para assistir a um vídeo com o passo a passo para rodar o projeto.
 
-[![Assista ao vídeo](https://img.shields.io/badge/Assista%20ao%20v%C3%ADdeo-YouTube-red)](tutorial.mp4)
+[![Assista ao vídeo](https://img.shields.io/badge/Assista%20ao%20v%C3%ADdeo-YouTube-red)](https://youtu.be/T9c748DUl1o)
 
 ### Como jogar
 
