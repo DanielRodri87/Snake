@@ -1,25 +1,47 @@
-# Jogo: Trabalho Final de Algoritmos
+---
 
-Este projeto consiste em um jogo proposto pelo professor Alan como trabalho final para a disciplina de Algoritmos.
+# Snake Game - Jogo da Cobrinha
 
-## Como Jogar?
+Um jogo simples da cobrinha desenvolvido em C utilizando algumas bibliotecas para a disciplina de Algoritmos e Programação - UFPI.
 
-Para executar o jogo, siga os passos abaixo:
+## Começando
 
-1. Compile o código-fonte utilizando o compilador GCC:
+Essas instruções fornecerão uma cópia do projeto em execução na sua máquina local para fins de teste. 
 
-2. Execute o jogo:
+**Versão do GCC**: `8.1.0`
 
-## Tutorial
 
-Acesse o tutorial do jogo [aqui](tutorial.gif).
+**Sistema operacional utilizado:** `Windows`
+
+### Configurando o ambiente
+
+1. **Clone o projeto para sua máquina**: 
+```bash
+git clone https://github.com/DanielRodri87/Snake.git
+```
+
+2. **Instalando as Bibliotecas**: Certifique-se de ter o GCC instalado na sua máquina.
+
+```bash
+gcc jogo.c -o jogo.exe -lwinmm
+```
+3. **Rodando o executável criado**: Aqui você irá executar o arquivo que você criou.
+```bash
+.\jogo.exe
+```
+
+
+
+O jogo da cobrinha será iniciado no seu terminal.
+
+### Como jogar
+
+- Use as setas direcionais ou "w a s d" do teclado para mover a cobra.
+- Tente pegar o maior número possível de blocos sem colidir com as paredes ou com a própria cobra.
 
 ## Desenvolvedores
 
-Este projeto foi desenvolvido por:
-
-- [DanielRodri87](https://github.com/DanielRodri87)
-- [ritar0drigues](https://github.com/ritar0drigues)
+- [![Daniel Rodrigues](https://img.shields.io/badge/DanielRodri87-GitHub-blueviolet)](https://github.com/DanielRodri87)
+- [![Rita de Cássia](https://img.shields.io/badge/ritar0drigues-GitHub-blueviolet)](https://github.com/ritar0drigues)
 
 ---
-*Nota: Certifique-se de ter o compilador GCC instalado em seu sistema para poder compilar o código-fonte.*
