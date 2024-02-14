@@ -30,7 +30,8 @@ gcc jogo.c -o jogo.exe -lwinmm
 .\jogo.exe
 ```
 
-
+### Passos resumidos em um vídeo
+img src="tutorial.mp4" mp="tutorial" width="800"/>
 
 O jogo da cobrinha será iniciado no seu terminal.
 
