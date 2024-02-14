@@ -32,11 +32,9 @@ gcc jogo.c -o jogo.exe -lwinmm
 
 ### Passos resumidos em um vídeo
 
-<video width="600" controls>
-  <source src="tutorial.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-O jogo da cobrinha será iniciado no seu terminal.
+Clique no botão abaixo para assistir a um vídeo com o passo a passo para rodar o projeto.
+
+[![Assista ao vídeo](https://img.shields.io/badge/Assista%20ao%20v%C3%ADdeo-YouTube-red)](tutorial.mp4)
 
 ### Como jogar
 
