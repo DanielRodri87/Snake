@@ -44,85 +44,137 @@ void tocarEfeitoSonoro(const char* arquivoSom) {
     PlaySound(arquivoSom, NULL, SND_FILENAME | SND_ASYNC);
 }
 
-void configuracao() {
-    fimDeJogo = 0;
-    dir = PARAR;
-    posicaoXCobra = LARGURA / 2;
-    posicaoYCobra = ALTURA / 2;
-    posicaoXFruta = rand() % LARGURA;
-    posicaoYFruta = rand() % ALTURA;
-    pontuacao = 0;
-    comprimentoCobra = 0;
-}
 
-void desenhar() {
-    system("cls");
+void exibirHistorico();
+void telaInicial();
+void escolherTamanhoCampo();
+void algoritmo(FILE *arquivoPartidas);
+void entrada();
+void desenhar();
+void configuracao();
 
-    gotoxy(0, 0);
-    for (int i = 0; i < LARGURA + 2; i++) {
-        setColor(3); 
-        printf("*");
+int main() {
+    srand(time(NULL)); 
+    telaInicial();
+
+    FILE *arquivoPartidas;
+    arquivoPartidas = fopen("partidas.txt", "a");
+    if (arquivoPartidas == NULL) {
+        printf("Erro ao abrir o arquivo de partidas.\n");
+        return 1;
     }
 
     for (int i = 0; i < ALTURA; i++) {
-        gotoxy(0, i + 1);
-        setColor(3); 
-        printf("*");
         for (int j = 0; j < LARGURA; j++) {
-            if (i == posicaoYCobra && j == posicaoXCobra) {
-                setColor(10); 
-                printf("O");
-            } else if (i == posicaoYFruta && j == posicaoXFruta) {
-                setColor(12); 
-                printf("o");
-            } else {
-                int ehCauda = 0;
-                for (int k = 0; k < comprimentoCobra; k++) {
-                    if (caudaX[k] == j && caudaY[k] == i) {
-                        setColor(14); 
-                        printf("%c", sequenciaUFPI[(k + indiceUFPI) % 4]);
-                        ehCauda = 1;
-                        break;
-                    }
-                }
-                if (!ehCauda) {
-                    setColor(15); 
-                    printf(" ");
-                }
-            }
+            campo[i][j] = ' ';
         }
-        setColor(3); 
-        printf("*\n");
     }
 
-    for (int i = 0; i < LARGURA + 2; i++) {
-        setColor(3); 
-        printf("*");
+    while (!fimDeJogo) {
+        desenhar();
+        entrada();
+        algoritmo(arquivoPartidas);
+        Sleep(100); 
     }
-    printf("\n");
 
-    setColor(7);
+    fclose(arquivoPartidas);
+
+    printf("Fim de Jogo! Sua pontuação: %d\n", pontuacao);
+    printf("Pressione qualquer tecla para voltar ao menu principal...\n\n");
+    _getch();
+    telaInicial();
+
+    return 0;
 }
 
-void entrada() {
-    if (_kbhit()) {
-        switch (_getch()) {
-            case 'a':
-                dir = ESQUERDA;
-                break;
-            case 'd':
-                dir = DIREITA;
-                break;
-            case 'w':
-                dir = CIMA;
-                break;
-            case 's':
-                dir = BAIXO;
-                break;
-            case 'x':
-                fimDeJogo = 1;
-                break;
-        }
+void exibirHistorico() {
+    FILE *arquivoPartidas;
+    char linha[100];
+
+    arquivoPartidas = fopen("partidas.txt", "r");
+    if (arquivoPartidas == NULL) {
+        printf("Nenhuma partida registrada.\n");
+        return;
+    }
+
+    printf("Histórico de Partidas:\n");
+    while (fgets(linha, sizeof(linha), arquivoPartidas) != NULL) {
+        printf("%s", linha);
+    }
+
+    fclose(arquivoPartidas);
+
+    printf("\nPressione qualquer tecla para voltar ao menu inicial...");
+    _getch(); 
+    telaInicial();
+}
+
+void telaInicial() {
+    tocarEfeitoSonoro("musicafundo.wav"); 
+    printf("fuO----------------------SNAKE----------------------Ofu\n");
+    printf("p                                                     p\n");
+    printf("i                                                     i\n");
+    printf("|                      By:                            |\n");
+    printf("|                         Rodrigames                  |\n");
+    printf("|                                                     |\n");
+    printf("i                                                     i\n");
+    printf("p                                                     p\n");
+    printf("ufO----------------------SNAKE----------------------Ouf\n");
+    printf("Digite seu nome: ");
+    scanf("%20s", nome);
+    
+    printf("------------------------- MENU -------------------------\n");
+    printf("1 - Jogar\n");
+    printf("2 - Ver Partidas\n");
+    printf("3 - Fechar\n");
+
+    int escolha;
+    scanf("%d", &escolha);
+    switch (escolha) {
+        case 1:
+            escolherTamanhoCampo();
+            configuracao();
+            break;
+        case 2:
+            exibirHistorico();
+            break;
+        case 3:
+            exit(0);
+            break;
+        default:
+            printf("Escolha invalida. Tente novamente.\n");
+            break;
+    }
+}
+
+
+void escolherTamanhoCampo() {
+    int escolha;
+    printf("Escolha o tamanho do campo:\n");
+    printf("1 - Facil\n");
+    printf("2 - Medio\n");
+    printf("3 - Difícil\n");
+    scanf("%d", &escolha);
+    PlaySound(NULL, NULL, 0); 
+
+    switch (escolha) {
+        case 1:
+            LARGURA = LARGURA_MAX;
+            ALTURA = ALTURA_MAX;
+            break;
+        case 2:
+            LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
+            ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
+            break;
+        case 3:
+            LARGURA = LARGURA_MIN;
+            ALTURA = ALTURA_MIN;
+            break;
+        default:
+            printf("Escolha inválida. Configurando para tamanho médio.\n");
+            LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
+            ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
+            break;
     }
 }
 
@@ -184,128 +236,84 @@ void algoritmo(FILE *arquivoPartidas) {
     }
 }
 
-void exibirHistorico(); // Protótipo da função
-
-void escolherTamanhoCampo() {
-    int escolha;
-    printf("Escolha o tamanho do campo:\n");
-    printf("1 - Facil\n");
-    printf("2 - Medio\n");
-    printf("3 - Difícil\n");
-    scanf("%d", &escolha);
-    PlaySound(NULL, NULL, 0); 
-
-    switch (escolha) {
-        case 1:
-            LARGURA = LARGURA_MAX;
-            ALTURA = ALTURA_MAX;
-            break;
-        case 2:
-            LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
-            ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
-            break;
-        case 3:
-            LARGURA = LARGURA_MIN;
-            ALTURA = ALTURA_MIN;
-            break;
-        default:
-            printf("Escolha inválida. Configurando para tamanho médio.\n");
-            LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
-            ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
-            break;
+void entrada() {
+    if (_kbhit()) {
+        switch (_getch()) {
+            case 'a':
+                dir = ESQUERDA;
+                break;
+            case 'd':
+                dir = DIREITA;
+                break;
+            case 'w':
+                dir = CIMA;
+                break;
+            case 's':
+                dir = BAIXO;
+                break;
+            case 'x':
+                fimDeJogo = 1;
+                break;
+        }
     }
 }
 
-void telaInicial() {
-    tocarEfeitoSonoro("musicafundo.wav"); 
-    printf("fuO----------------------SNAKE----------------------Ofu\n");
-    printf("p                                                     p\n");
-    printf("i                                                     i\n");
-    printf("|                      By:                            |\n");
-    printf("|                         Rodrigames                  |\n");
-    printf("|                                                     |\n");
-    printf("i                                                     i\n");
-    printf("p                                                     p\n");
-    printf("ufO----------------------SNAKE----------------------Ouf\n");
-    printf("Digite seu nome: ");
-    scanf("%20s", nome);
-    
-    printf("------------------------- MENU -------------------------\n");
-    printf("1 - Jogar\n");
-    printf("2 - Ver Partidas\n");
-    printf("3 - Fechar\n");
+void desenhar() {
+    system("cls");
 
-    int escolha;
-    scanf("%d", &escolha);
-    switch (escolha) {
-        case 1:
-            escolherTamanhoCampo();
-            configuracao();
-            break;
-        case 2:
-            exibirHistorico();
-            break;
-        case 3:
-            exit(0);
-            break;
-        default:
-            printf("Escolha invalida. Tente novamente.\n");
-            break;
-    }
-}
-
-void exibirHistorico() {
-    FILE *arquivoPartidas;
-    char linha[100];
-
-    arquivoPartidas = fopen("partidas.txt", "r");
-    if (arquivoPartidas == NULL) {
-        printf("Nenhuma partida registrada.\n");
-        return;
-    }
-
-    printf("Histórico de Partidas:\n");
-    while (fgets(linha, sizeof(linha), arquivoPartidas) != NULL) {
-        printf("%s", linha);
-    }
-
-    fclose(arquivoPartidas);
-
-    printf("\nPressione qualquer tecla para voltar ao menu inicial...");
-    _getch(); 
-    telaInicial();
-}
-
-int main() {
-    srand(time(NULL)); 
-    telaInicial();
-
-    FILE *arquivoPartidas;
-    arquivoPartidas = fopen("partidas.txt", "a");
-    if (arquivoPartidas == NULL) {
-        printf("Erro ao abrir o arquivo de partidas.\n");
-        return 1;
+    gotoxy(0, 0);
+    for (int i = 0; i < LARGURA + 2; i++) {
+        setColor(3); 
+        printf("*");
     }
 
     for (int i = 0; i < ALTURA; i++) {
+        gotoxy(0, i + 1);
+        setColor(3); 
+        printf("*");
         for (int j = 0; j < LARGURA; j++) {
-            campo[i][j] = ' ';
+            if (i == posicaoYCobra && j == posicaoXCobra) {
+                setColor(10); 
+                printf("O");
+            } else if (i == posicaoYFruta && j == posicaoXFruta) {
+                setColor(12); 
+                printf("o");
+            } else {
+                int ehCauda = 0;
+                for (int k = 0; k < comprimentoCobra; k++) {
+                    if (caudaX[k] == j && caudaY[k] == i) {
+                        setColor(14); 
+                        printf("%c", sequenciaUFPI[(k + indiceUFPI) % 4]);
+                        ehCauda = 1;
+                        break;
+                    }
+                }
+                if (!ehCauda) {
+                    setColor(15); 
+                    printf(" ");
+                }
+            }
         }
+        setColor(3); 
+        printf("*\n");
     }
 
-    while (!fimDeJogo) {
-        desenhar();
-        entrada();
-        algoritmo(arquivoPartidas);
-        Sleep(100); 
+    for (int i = 0; i < LARGURA + 2; i++) {
+        setColor(3); 
+        printf("*");
     }
+    printf("\n");
 
-    fclose(arquivoPartidas);
+    setColor(7);
+}
 
-    printf("Fim de Jogo! Sua pontuação: %d\n", pontuacao);
-    printf("Pressione qualquer tecla para voltar ao menu principal...\n\n");
-    _getch();
-    telaInicial();
-
-    return 0;
+void configuracao() {
+    fimDeJogo = 0;
+    dir = PARAR;
+    posicaoXCobra = LARGURA / 2;
+    posicaoYCobra = ALTURA / 2;
+    posicaoXFruta = rand() % LARGURA;
+    posicaoYFruta = rand() % ALTURA;
+    pontuacao = 0;
+    comprimentoCobra = 0;
 }

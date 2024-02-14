@@ -10,3 +10,11 @@ Nome: doni
 Pontuação: 10
 Tamanho do Campo: 40x20
 ---------------------------
+Nome: daniel
+Pontuação: 10
+Tamanho do Campo: 10x5
+---------------------------
+Nome: dsjkd
+Pontuação: 30
+Tamanho do Campo: 40x20
+---------------------------
