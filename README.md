@@ -31,7 +31,11 @@ gcc jogo.c -o jogo.exe -lwinmm
 ```
 
 ### Passos resumidos em um vídeo
-<img src="tutorial.mp4" mp="tutorial" width="800"/>
+
+<video controls width="800">
+    <source src="tutorial.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
 
 O jogo da cobrinha será iniciado no seu terminal.
 
