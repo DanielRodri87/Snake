@@ -18,3 +18,59 @@ Nome: dsjkd
 Pontuação: 30
 Tamanho do Campo: 40x20
 ---------------------------
+Nome: daniel.
+Pontuação: 10
+Tamanho do Campo: 25x12
+---------------------------
+Nome: aa
+Pontuação: 0
+Tamanho do Campo: 10x5
+---------------------------
+Nome: sss
+Pontuação: 0
+Tamanho do Campo: 10x5
+---------------------------
+Nome: www
+Pontuação: 220
+Tamanho do Campo: 40x20
+---------------------------
+Nome: qqq
+Pontuação: 0
+Tamanho do Campo: 40x20
+---------------------------
+Nome: teste.
+Pontuação: 10
+Tamanho do Campo: 10x5
+---------------------------
+Nome: daniel
+Pontuação: 0
+Tamanho do Campo: 10x5
+---------------------------
+Nome: fsdfkjd
+Pontuação: 0
+Tamanho do Campo: 10x5
+---------------------------
+Nome: ssss
+Pontuação: 30
+Tamanho do Campo: 10x5
+---------------------------
+Nome: www
+Pontuação: 0
+Tamanho do Campo: 10x5
+---------------------------
+Nome: fff
+Pontuação: 100
+Tamanho do Campo: 40x20
+---------------------------
+Nome: kkk
+Pontuação: 10
+Tamanho do Campo: 10x5
+---------------------------
+Nome: www
+Pontuação: 10
+Tamanho do Campo: 10x5
+---------------------------
+Nome: aa
+Pontuação: 60
+Tamanho do Campo: 40x20
+---------------------------

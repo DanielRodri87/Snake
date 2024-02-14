@@ -55,38 +55,38 @@ void configuracao();
 
 int main() {
     srand(time(NULL)); 
-    telaInicial();
 
-    FILE *arquivoPartidas;
-    arquivoPartidas = fopen("partidas.txt", "a");
-    if (arquivoPartidas == NULL) {
-        printf("Erro ao abrir o arquivo de partidas.\n");
-        return 1;
-    }
+    while (1) { 
+        telaInicial();
 
-    for (int i = 0; i < ALTURA; i++) {
-        for (int j = 0; j < LARGURA; j++) {
-            campo[i][j] = ' ';
+        FILE *arquivoPartidas;
+        arquivoPartidas = fopen("partidas.txt", "a");
+        if (arquivoPartidas == NULL) {
+            printf("Erro ao abrir o arquivo de partidas.\n");
+            return 1;
         }
+
+        for (int i = 0; i < ALTURA; i++) {
+            for (int j = 0; j < LARGURA; j++) {
+                campo[i][j] = ' ';
+            }
+        }
+
+        while (!fimDeJogo) {
+            desenhar();
+            entrada();
+            algoritmo(arquivoPartidas);
+            Sleep(100); 
+        }
+
+        fclose(arquivoPartidas);
+
+        printf("Fim de Jogo! Sua pontuação: %d\n", pontuacao);
+        _getch();
     }
-
-    while (!fimDeJogo) {
-        desenhar();
-        entrada();
-        algoritmo(arquivoPartidas);
-        Sleep(100); 
-    }
-
-    fclose(arquivoPartidas);
-
-    printf("Fim de Jogo! Sua pontuação: %d\n", pontuacao);
-    printf("Pressione qualquer tecla para voltar ao menu principal...\n\n");
-    _getch();
-    telaInicial();
 
     return 0;
 }
-
 void exibirHistorico() {
     FILE *arquivoPartidas;
     char linha[100];
@@ -120,8 +120,7 @@ void telaInicial() {
     printf("i                                                     i\n");
     printf("p                                                     p\n");
     printf("ufO----------------------SNAKE----------------------Ouf\n");
-    printf("Digite seu nome: ");
-    scanf("%20s", nome);
+
     
     printf("------------------------- MENU -------------------------\n");
     printf("1 - Jogar\n");
@@ -132,6 +131,8 @@ void telaInicial() {
     scanf("%d", &escolha);
     switch (escolha) {
         case 1:
+            printf("Digite seu nome: ");
+            scanf("%20s", nome);
             escolherTamanhoCampo();
             configuracao();
             break;
@@ -260,7 +261,6 @@ void entrada() {
 
 void desenhar() {
     system("cls");
-
     gotoxy(0, 0);
     for (int i = 0; i < LARGURA + 2; i++) {
         setColor(3); 
@@ -315,5 +315,5 @@ void configuracao() {
     posicaoXFruta = rand() % LARGURA;
     posicaoYFruta = rand() % ALTURA;
     pontuacao = 0;
-    comprimentoCobra = 0;
+    comprimentoCobra = 0; 
 }
