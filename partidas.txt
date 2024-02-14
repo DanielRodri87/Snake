@@ -74,3 +74,23 @@ Nome: aa
 Pontuação: 60
 Tamanho do Campo: 40x20
 ---------------------------
+Nome: dfdfgdfg
+Pontuação: 30
+Tamanho do Campo: 40x20
+---------------------------
+Nome: alan
+Pontuação: 30
+Tamanho do Campo: 10x5
+---------------------------
+Nome: aaaaa
+Pontuação: 20
+Tamanho do Campo: 40x20
+---------------------------
+Nome: ayrton
+Pontuação: 150
+Tamanho do Campo: 25x12
+---------------------------
+Nome: tttt
+Pontuação: 100
+Tamanho do Campo: 40x20
+---------------------------

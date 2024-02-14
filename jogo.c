@@ -76,7 +76,16 @@ int main() {
             desenhar();
             entrada();
             algoritmo(arquivoPartidas);
-            Sleep(100); 
+
+            // Ajuste do tempo de espera com base na direção da cobra
+            int tempoEspera;
+            if (dir == CIMA || dir == BAIXO) {
+                tempoEspera = 200; // Tempo de espera mais longo para movimento vertical
+            } else {
+                tempoEspera = 100; // Tempo de espera mais curto para movimento horizontal
+            }
+
+            Sleep(tempoEspera); 
         }
 
         fclose(arquivoPartidas);
@@ -87,6 +96,7 @@ int main() {
 
     return 0;
 }
+
 void exibirHistorico() {
     FILE *arquivoPartidas;
     char linha[100];
@@ -229,7 +239,7 @@ void algoritmo(FILE *arquivoPartidas) {
     }
 
     if (fimDeJogo) {
-        // Salvar a partida no arquivo
+        tocarEfeitoSonoro("derrota.wav");
         fprintf(arquivoPartidas, "Nome: %s\n", nome);
         fprintf(arquivoPartidas, "Pontuação: %d\n", pontuacao);
         fprintf(arquivoPartidas, "Tamanho do Campo: %dx%d\n", LARGURA, ALTURA);
