@@ -23,6 +23,8 @@ char campo[ALTURA_MAX][LARGURA_MAX];
 char nome[21];
 
 
+
+
 enum Direcao { PARAR = 0, ESQUERDA, DIREITA, CIMA, BAIXO };
 enum Direcao dir;
 
@@ -77,12 +79,11 @@ int main() {
             entrada();
             algoritmo(arquivoPartidas);
 
-            // Ajuste do tempo de espera com base na direção da cobra
             int tempoEspera;
             if (dir == CIMA || dir == BAIXO) {
-                tempoEspera = 200; // Tempo de espera mais longo para movimento vertical
+                tempoEspera = 150; 
             } else {
-                tempoEspera = 100; // Tempo de espera mais curto para movimento horizontal
+                tempoEspera = 100;
             }
 
             Sleep(tempoEspera); 
@@ -90,7 +91,7 @@ int main() {
 
         fclose(arquivoPartidas);
 
-        printf("Fim de Jogo! Sua pontuação: %d\n", pontuacao);
+        printf("Fim de Jogo! Sua pontuacao: %d\n", pontuacao);
         _getch();
     }
 
@@ -107,7 +108,7 @@ void exibirHistorico() {
         return;
     }
 
-    printf("Histórico de Partidas:\n");
+    printf("Historico de Partidas:\n");
     while (fgets(linha, sizeof(linha), arquivoPartidas) != NULL) {
         printf("%s", linha);
     }
@@ -164,7 +165,7 @@ void escolherTamanhoCampo() {
     printf("Escolha o tamanho do campo:\n");
     printf("1 - Facil\n");
     printf("2 - Medio\n");
-    printf("3 - Difícil\n");
+    printf("3 - Dificil\n");
     scanf("%d", &escolha);
     PlaySound(NULL, NULL, 0); 
 
@@ -182,7 +183,7 @@ void escolherTamanhoCampo() {
             ALTURA = ALTURA_MIN;
             break;
         default:
-            printf("Escolha inválida. Configurando para tamanho médio.\n");
+            printf("Escolha invalida. Configurando para tamanho medio.\n");
             LARGURA = (LARGURA_MAX + LARGURA_MIN) / 2;
             ALTURA = (ALTURA_MAX + ALTURA_MIN) / 2;
             break;
@@ -241,7 +242,7 @@ void algoritmo(FILE *arquivoPartidas) {
     if (fimDeJogo) {
         tocarEfeitoSonoro("derrota.wav");
         fprintf(arquivoPartidas, "Nome: %s\n", nome);
-        fprintf(arquivoPartidas, "Pontuação: %d\n", pontuacao);
+        fprintf(arquivoPartidas, "Pontuacao: %d\n", pontuacao);
         fprintf(arquivoPartidas, "Tamanho do Campo: %dx%d\n", LARGURA, ALTURA);
         fprintf(arquivoPartidas, "---------------------------\n");
     }
