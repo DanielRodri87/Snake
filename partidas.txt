@@ -10,3 +10,51 @@ Nome: aaaaaa
 Pontuacao: 50
 Tamanho do Campo: 40x20
 ---------------------------
+Nome: jbjhvjvh
+Pontuacao: 20
+Tamanho do Campo: 25x12
+---------------------------
+Nome: aaa.
+Pontuacao: 40
+Tamanho do Campo: 25x12
+---------------------------
+Nome: .
+Pontuacao: 30
+Tamanho do Campo: 25x12
+---------------------------
+Nome: danielpro
+Pontuacao: 60
+Tamanho do Campo: 25x12
+---------------------------
+Nome: .
+Pontuacao: 40
+Tamanho do Campo: 25x12
+---------------------------
+Nome: aaa
+Pontuacao: 30
+Tamanho do Campo: 25x12
+---------------------------
+Nome: aa.
+Pontuacao: 30
+Tamanho do Campo: 25x12
+---------------------------
+Nome: aa
+Pontuacao: 20
+Tamanho do Campo: 40x20
+---------------------------
+Nome: aaa
+Pontuacao: 0
+Tamanho do Campo: 25x12
+---------------------------
+Nome: daniel
+Pontuacao: 10
+Tamanho do Campo: 40x20
+---------------------------
+Nome: .
+Pontuacao: 10
+Tamanho do Campo: 40x20
+---------------------------
+Nome: daniel
+Pontuacao: 30
+Tamanho do Campo: 40x20
+---------------------------

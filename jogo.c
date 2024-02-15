@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <mmsystem.h> 
 
+
+
 #define LARGURA_MAX 40
 #define ALTURA_MAX 20
 #define LARGURA_MIN 10
@@ -122,18 +124,20 @@ void exibirHistorico() {
 
 void telaInicial() {
     tocarEfeitoSonoro("musicafundo.wav"); 
-    printf("fuO----------------------SNAKE----------------------Ofu\n");
-    printf("p                                                     p\n");
-    printf("i                                                     i\n");
-    printf("|                      By:                            |\n");
-    printf("|                         Rodrigames                  |\n");
-    printf("|                                                     |\n");
-    printf("i                                                     i\n");
-    printf("p                                                     p\n");
-    printf("ufO----------------------SNAKE----------------------Ouf\n");
+    setColor(9);
+    printf("fuO\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD SNAKE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCDOfu\n");
+    printf("p                                                p\n");
+    printf("i                                                i\n");
+    printf("|                      By:                       |\n");
+    printf("|                         Rodrigames             |\n");
+    printf("|                                                |\n");
+    printf("i                                                i\n");
+    printf("p                                                p\n");
+    printf("fuO\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD SNAKE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCDOfu\n");
 
-    
-    printf("------------------------- MENU -------------------------\n");
+    printf("\n\n\n");
+
+    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD  MENU  \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
     printf("1 - Jogar\n");
     printf("2 - Ver Partidas\n");
     printf("3 - Fechar\n");
@@ -248,6 +252,7 @@ void algoritmo(FILE *arquivoPartidas) {
     }
 }
 
+
 void entrada() {
     if (_kbhit()) {
         switch (_getch()) {
@@ -272,28 +277,27 @@ void entrada() {
 
 void desenhar() {
     system("cls");
-    gotoxy(0, 0);
-    for (int i = 0; i < LARGURA + 2; i++) {
-        setColor(3); 
-        printf("*");
+    setColor(9); 
+    printf("\xC9");
+    for (int i = 0; i < LARGURA; i++) {
+        printf("\xCD");
     }
+    printf("\xBB\n");
 
     for (int i = 0; i < ALTURA; i++) {
-        gotoxy(0, i + 1);
-        setColor(3); 
-        printf("*");
+        printf("\xBA");
         for (int j = 0; j < LARGURA; j++) {
             if (i == posicaoYCobra && j == posicaoXCobra) {
                 setColor(10); 
                 printf("O");
             } else if (i == posicaoYFruta && j == posicaoXFruta) {
-                setColor(12); 
+                setColor(12);
                 printf("o");
             } else {
                 int ehCauda = 0;
                 for (int k = 0; k < comprimentoCobra; k++) {
                     if (caudaX[k] == j && caudaY[k] == i) {
-                        setColor(14); 
+                        setColor(14); // Amarelo
                         printf("%c", sequenciaUFPI[(k + indiceUFPI) % 4]);
                         ehCauda = 1;
                         break;
@@ -305,18 +309,19 @@ void desenhar() {
                 }
             }
         }
-        setColor(3); 
-        printf("*\n");
+        setColor(9);
+        printf("\xBA\n");
     }
-
-    for (int i = 0; i < LARGURA + 2; i++) {
-        setColor(3); 
-        printf("*");
+    
+    printf("\xC8");
+    for (int i = 0; i < LARGURA; i++) {
+        printf("\xCD");
     }
-    printf("\n");
+    printf("\xBC\n");
 
-    setColor(7);
+    setColor(7); 
 }
+
 
 void configuracao() {
     fimDeJogo = 0;
