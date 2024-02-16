@@ -58,3 +58,27 @@ Nome: daniel
 Pontuacao: 30
 Tamanho do Campo: 40x20
 ---------------------------
+Nome: daniel
+Pontuacao: 10
+Tamanho do Campo: 10x5
+---------------------------
+Nome: aaa
+Pontuacao: 10
+Tamanho do Campo: 25x12
+---------------------------
+Nome: 2
+Pontuacao: 20
+Tamanho do Campo: 25x12
+---------------------------
+Nome: aaa
+Pontuacao: 100
+Tamanho do Campo: 25x12
+---------------------------
+Nome: rit
+Pontuacao: 80
+Tamanho do Campo: 40x20
+---------------------------
+Nome: aa
+Pontuacao: 80
+Tamanho do Campo: 25x12
+---------------------------
