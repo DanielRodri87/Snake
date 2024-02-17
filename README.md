@@ -1,5 +1,5 @@
 ---
-
+# Recomendo jogar o jogo.c. Entretanto, se não funcionar a instalação, execute normalmente jogosemsom.c
 # Snake Game - Jogo da Cobrinha
 
 Um jogo simples da cobrinha desenvolvido em C utilizando algumas bibliotecas para a disciplina de Algoritmos e Programação - UFPI.
@@ -38,7 +38,7 @@ Clique no botão abaixo para assistir a um vídeo com o passo a passo para rodar
 
 ### Como jogar
 
-- Use as setas direcionais ou "w a s d" do teclado para mover a cobra.
+- Use "w a s d" do teclado para mover a cobra.
 - Tente pegar o maior número possível de blocos sem colidir com as paredes ou com a própria cobra.
 
 ## Desenvolvedores
